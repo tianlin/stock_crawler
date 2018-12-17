@@ -16,11 +16,11 @@ func TestFetchInfo(t *testing.T) {
 
 	submatches := re.FindStringSubmatch(content)
 
-	if submatches[1] != "510050" {
+	if submatches[2] != "510050" {
 		t.Errorf("Get stock id failed:%s", submatches[1])
 	}
 
-	if submatches[2] != "50ETF,0.000,2.453,2.453,0.000,0.000,0.000,0.000,0,0.000,0,0.000,0,0.000,0,0.000,0,0.000,0,0.000,0,0.000,0,0.000,0,0.000,0,0.000,0,0.000,2018-12-14,09:10:39,00" {
+	if submatches[3] != "50ETF,0.000,2.453,2.453,0.000,0.000,0.000,0.000,0,0.000,0,0.000,0,0.000,0,0.000,0,0.000,0,0.000,0,0.000,0,0.000,0,0.000,0,0.000,0,0.000,2018-12-14,09:10:39,00" {
 		t.Errorf("Get info failed:%s", submatches[2])
 	}
 }

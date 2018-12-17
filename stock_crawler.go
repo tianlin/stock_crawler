@@ -14,7 +14,7 @@ import (
 
 const (
 	BatchSize = 10
-	Pattern   = `var hq_str_sh(?P<StockID>[^=]+)="(?P<Info>[^"]*)";`
+	Pattern   = `var hq_str_s(h|z)(?P<StockID>[^=]+)="(?P<Info>[^"]*)";`
 )
 
 type StockInfo struct {
@@ -78,7 +78,12 @@ func (sc *StockCrawler) Crawl() (stocks map[string]*StockInfo) {
 			defer wg.Done()
 			var idsWithPrefix []string
 			for _, id := range ids {
-				idsWithPrefix = append(idsWithPrefix, "sh"+id)
+				if strings.HasPrefix(id, "0") ||
+					strings.HasPrefix(id, "3") {
+					idsWithPrefix = append(idsWithPrefix, "sz"+id)
+				} else {
+					idsWithPrefix = append(idsWithPrefix, "sh"+id)
+				}
 			}
 			url := fmt.Sprintf("http://hq.sinajs.cn/list=%s", strings.Join(idsWithPrefix, ","))
 			resp, err := sc.client.Get(url)
@@ -103,16 +108,16 @@ func (sc *StockCrawler) Crawl() (stocks map[string]*StockInfo) {
 				}
 
 				matches := sc.re.FindStringSubmatch(line)
-				if len(matches) > 2 {
-					stockId := matches[1]
-					if matches[2] == "" {
+				if len(matches) > 3 {
+					stockId := matches[2]
+					if matches[3] == "" {
 						infoChan <- &StockInfo{
 							Id: stockId,
 						}
 						continue
 					}
 
-					infos := strings.Split(matches[2], ",")
+					infos := strings.Split(matches[3], ",")
 					if len(infos) > 6 {
 						price, _ := strconv.ParseFloat(infos[3], 10)
 						info := StockInfo{
