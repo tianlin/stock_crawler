@@ -26,7 +26,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("New stock crawler failed: %s", err.Error())
 	}
-	stacks := sc.Crawl()
+	stocks := sc.Crawl()
 
 	f, err := os.Open(*output)
 	if err != nil {
@@ -42,10 +42,10 @@ func main() {
 	f.Close()
 
 	log.Printf("Begin update stock prices to output")
-	err = stock_crawler.UpdateInfos(*output, ids, stacks, now)
+	err = stock_crawler.UpdateInfos(*output, ids, stocks, now)
 	if err != nil {
 		log.Fatalf("Update infos failed: %s", err.Error())
 	}
 
-	log.Printf("Update stack prices success")
+	log.Printf("Update stock prices success")
 }
