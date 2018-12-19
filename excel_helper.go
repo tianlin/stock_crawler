@@ -74,7 +74,9 @@ func UpdateInfos(filename string, ids []string, stocks map[string]*StockInfo, no
 
 	// Add Date & Time
 	xlsx.SetCellStr(SheetName, fmt.Sprintf("A%d", j+1), now.Format(DateFmt))
-	xlsx.SetCellStr(SheetName, fmt.Sprintf("B%d", j+1), now.Format(TimeFmt))
+	hour := now.Hour()
+	min := (now.Minute() / 5) * 5
+	xlsx.SetCellInt(SheetName, fmt.Sprintf("B%d", j+1), hour*100+min)
 
 	// Add current prices
 	for i, id := range ids {
