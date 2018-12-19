@@ -1,2 +1,5 @@
 *.xlsx
 *.tmp
+sc/*.xlsx
+sc/sc
+sc/sc.exe
